@@ -2,12 +2,14 @@ package unity.util.bascule.co.jp.unity_lib;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.os.BatteryManager;
 import android.app.Activity;
 import android.content.IntentFilter;
 import com.unity3d.player.UnityPlayer;
 
 import android.hardware.SensorManager;
+import android.util.Log;
 
 public class GetAndroidStatus {
     private static SensorManager manager;
@@ -35,28 +37,19 @@ public class GetAndroidStatus {
         return level;
     }
 
+    public static int SetMaxVolume() {
+        final Activity activity = UnityPlayer.currentActivity;
+        final Context context = activity.getApplicationContext();
 
-//    public static float GetTemperature() {
-//        final Activity activity = UnityPlayer.currentActivity;
-//        final Context context = activity.getApplicationContext();
-//
-//        if (manager == null) {
-//            initSensor(activity);
-//        }
-//        float temperature = getTemperature();
-//        return temperature;
-//    }
-//
-//    private static float getTemperature() {
-//        if (listener == null)
-//            return 0f;
-//
-//        return listener.value;
-//    }
-//
-//    private static void initSensor(Activity activity) {
-//        manager = (SensorManager)activity.getSystemService(Context.SENSOR_SERVICE);
-//        listener = new TemperatureListener(manager);
-//    }
+        AudioManager am = (AudioManager)activity.getSystemService(Context.AUDIO_SERVICE);
+
+        int ringMaxVolume = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+
+        am.setStreamVolume(AudioManager.STREAM_MUSIC, ringMaxVolume, 0);
+
+//        int ringVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC);
+//        Log.d("SetMaxVolume", "volume:" + ringVolume + ", max: " + ringMaxVolume);
+        return ringMaxVolume;
+    }
 
 }
